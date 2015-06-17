@@ -3,6 +3,7 @@ package com.javadude.model;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TodoList {
@@ -23,9 +24,19 @@ public class TodoList {
 	}
 
 	private List<TodoItem> items = new ArrayList<TodoItem>();
+	
+	// CAUTION!!! THIS EXPOSES THE REAL LIST!!! USERS CAN CHANGE IT WITHOUT
+	//   US KNOWING; WE CANNOT FIRE PROPERTY CHANGE!!! 
 	public List<TodoItem> getItems() {
-		return items;
+		// OPTION 1 - make the list immutable
+		return Collections.unmodifiableList(items);
+		
+		// OPTION 2 - create a list wrapper that fires changes on our behalf
+		//   left as an exercise for the interested (read "masochistic") reader
+		//   Note: if this is done, we don't need the add() and remove() methods below
+		//         users can just call getItems().add(xxx) or getItems().remove(xxx)
 	}
+	
 	public void add(TodoItem todoItem) {
 		items.add(todoItem);
 		// use null for old value - always fire event, 
