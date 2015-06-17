@@ -1,13 +1,34 @@
 package com.javadude.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 public class TodoItem {
+	// Use PropertyChangeSupport for Observer support of bound properties
+	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+	
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		propertyChangeSupport.addPropertyChangeListener(listener);
+	}
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		propertyChangeSupport.removePropertyChangeListener(listener);
+	}
+	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
+	}
+	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
+	}
+
 	private String description;
 	public String getDescription() {
 		return description;
 	}
 
 	public void setDescription(String description) {
+		String old = this.description; // bound property
 		this.description = description;
+		propertyChangeSupport.firePropertyChange("description", old, description); // bound property
 	}
 
 	@Override
