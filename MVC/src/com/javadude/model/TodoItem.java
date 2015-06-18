@@ -20,8 +20,8 @@ public class TodoItem {
 		propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
 	}
 
-	private String priority;
-	private String description;
+	private String priority = "1";
+	private String description = "New Item";
 	
 	public String getPriority() {
 		return priority;
