@@ -20,7 +20,17 @@ public class TodoItem {
 		propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
 	}
 
+	private String priority;
 	private String description;
+	
+	public String getPriority() {
+		return priority;
+	}
+	public void setPriority(String priority) {
+		String old = this.priority; // bound property
+		this.priority = priority;
+		propertyChangeSupport.firePropertyChange("priority", old, priority); // bound property
+	}
 	public String getDescription() {
 		return description;
 	}
