@@ -37,14 +37,18 @@ public class TodoList {
 		//         users can just call getItems().add(xxx) or getItems().remove(xxx)
 	}
 	
+	private PropertyChangeListener itemListener = e -> propertyChangeSupport.firePropertyChange("items", null, items);
+	
 	public void add(TodoItem todoItem) {
 		items.add(todoItem);
+		todoItem.addPropertyChangeListener(itemListener);
 		// use null for old value - always fire event, 
 		//   and rarely do listeners care about old value
 		propertyChangeSupport.firePropertyChange("items", null, items);
 	}
 	public void remove(TodoItem todoItem) {
 		items.remove(todoItem);
+		todoItem.removePropertyChangeListener(itemListener);
 		// use null for old value - always fire event, 
 		//   and rarely do listeners care about old value
 		propertyChangeSupport.firePropertyChange("items", null, items);

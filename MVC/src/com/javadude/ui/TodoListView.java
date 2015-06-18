@@ -56,6 +56,7 @@ public class TodoListView extends Panel {
 
 		addButton.addActionListener(e -> {
 			TodoItem todoItem = new TodoItem();
+			todoItem.setDescription("New Item");
 			model.add(todoItem);
 			list.select(model.getItems().size()-1);
 			todoView.setModel(todoItem);
