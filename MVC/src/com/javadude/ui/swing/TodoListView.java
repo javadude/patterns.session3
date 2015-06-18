@@ -18,6 +18,7 @@ public class TodoListView extends JPanel {
 	private JList<TodoItem> list;
 	private TodoListModel todoListModel;
 	private TodoView todoView;
+	private StatusBar statusBar;
 
 	public TodoList getModel() {
 		return model;
@@ -27,12 +28,13 @@ public class TodoListView extends JPanel {
 		if (this.model != null) {
 			// disconnect from the previous model
 			todoListModel.setModel(null); // unhook previous model
+			statusBar.setList(null);
 		}
 		this.model = model;
 		if (this.model != null) {
 			// connect to the new model
 			todoListModel.setModel(model);
-			// populate the UI
+			statusBar.setList(model);
 		}
 	}
 	
@@ -41,13 +43,16 @@ public class TodoListView extends JPanel {
 	}
 	@SuppressWarnings("serial")
 	public TodoListView(ListSelectionModel selectionModel) {
+		statusBar = new StatusBar();
 		todoListModel = new TodoListModel();
 		list = new JList<TodoItem>(todoListModel);
 		if (selectionModel != null)
 			list.setSelectionModel(selectionModel);
 		list.setCellRenderer(new TodoRenderer());
 		list.addListSelectionListener(e -> {
-			todoView.setModel(list.getSelectedValue());
+			TodoItem selectedValue = list.getSelectedValue();
+			todoView.setModel(selectedValue);
+			statusBar.setItem(selectedValue);
 		});
 		todoView = new TodoView();
 		
@@ -60,12 +65,15 @@ public class TodoListView extends JPanel {
 			list.setSelectedValue(todoItem, true);
 		});
 		removeButton.addActionListener(e -> {
-			model.remove(list.getSelectedValue());
-			todoView.setModel(list.getSelectedValue());
+			TodoItem selectedValue = list.getSelectedValue();
+			model.remove(selectedValue);
+			todoView.setModel(selectedValue);
+			statusBar.setItem(selectedValue);
 		});
 		
 		setLayout(new BorderLayout());
 		add(BorderLayout.WEST, list);
+		add(BorderLayout.SOUTH, statusBar);
 		add(BorderLayout.CENTER, new JPanel(new BorderLayout()) {{
 			add(BorderLayout.CENTER, todoView);
 			add(BorderLayout.SOUTH, new JPanel(new FlowLayout(FlowLayout.RIGHT)) {{
