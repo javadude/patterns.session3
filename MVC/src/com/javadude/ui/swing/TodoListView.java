@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 
 import com.javadude.model.TodoItem;
 import com.javadude.model.TodoList;
@@ -35,10 +36,15 @@ public class TodoListView extends JPanel {
 		}
 	}
 	
-	@SuppressWarnings("serial")
 	public TodoListView() {
+		this(null);
+	}
+	@SuppressWarnings("serial")
+	public TodoListView(ListSelectionModel selectionModel) {
 		todoListModel = new TodoListModel();
 		list = new JList<TodoItem>(todoListModel);
+		if (selectionModel != null)
+			list.setSelectionModel(selectionModel);
 		list.setCellRenderer(new TodoRenderer());
 		list.addListSelectionListener(e -> {
 			todoView.setModel(list.getSelectedValue());

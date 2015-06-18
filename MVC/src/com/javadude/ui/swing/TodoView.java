@@ -7,6 +7,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -72,7 +73,7 @@ public class TodoView extends JPanel {
 	}
 	private void listen(JTextField field, Runnable runnable) {
 		field.getDocument().addDocumentListener(new DocumentListener() {
-			public void changed() { runnable.run(); }
+			public void changed() { SwingUtilities.invokeLater(runnable); }
 			@Override public void changedUpdate(DocumentEvent e) { changed(); }
 			@Override public void insertUpdate(DocumentEvent e)  { changed(); }
 			@Override public void removeUpdate(DocumentEvent e)  { changed(); }
